@@ -3,6 +3,8 @@ import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 import { protectAdmin } from './authRoutes.js';
 import { protect } from './userRoutes.js';
+import sendOrderEmail from '../config/mail.js';
+
 
 
 const router = express.Router();
@@ -68,7 +70,9 @@ router.post('/', protect, async (req, res) => {
 
     const createdOrder = await order.save();
 
-
+    // ── SEND NOTIFICATIONS (Async, don't block the response) ──
+    sendOrderEmail(createdOrder, req.user, 'customer');
+    sendOrderEmail(createdOrder, req.user, 'admin');
 
     res.status(201).json(createdOrder);
   } catch (error) {
