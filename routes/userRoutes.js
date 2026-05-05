@@ -413,7 +413,8 @@ router.post('/reset-password', async (req, res) => {
     }
 
     user.password = newPassword;
-    await user.save();
+    // Bypass validation to avoid errors if the user profile is missing required fields like 'email'
+    await user.save({ validateBeforeSave: false });
     await OTP.deleteMany({ mobile: user.mobile }); // Cleanup
     res.json({ message: 'Password reset successfully. Please login with your new password.' });
   } catch (error) {
