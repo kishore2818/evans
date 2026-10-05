@@ -26,23 +26,41 @@ router.get('/', async (req, res) => {
 // @access  Private/Admin
 router.put('/', protectAdmin, async (req, res) => {
   try {
-    const { shippingFee, freeShippingThreshold } = req.body;
+    const { shippingFee, freeShippingThreshold, flashSale } = req.body;
 
-    let settings = await Settings.findOne({ key: 'store_settings' });
+    const updateFields = {};
+    if (shippingFee !== undefined) updateFields.shippingFee = Number(shippingFee);
+    if (freeShippingThreshold !== undefined) updateFields.freeShippingThreshold = Number(freeShippingThreshold);
     
-    if (!settings) {
-      settings = new Settings({ key: 'store_settings' });
+    if (flashSale !== undefined) {
+      updateFields.flashSale = {
+        isActive: Boolean(flashSale.isActive),
+        title: flashSale.title || 'Luxe Summer Glow Sale',
+        bannerText: flashSale.bannerText || '',
+        discountPercentage: Number(flashSale.discountPercentage) || 0,
+        endDate: flashSale.endDate ? new Date(flashSale.endDate) : new Date(Date.now() + 48 * 3600 * 1000),
+        buttonText: flashSale.buttonText || 'Shop Flash Deals',
+        linkUrl: flashSale.linkUrl || '/products'
+      };
     }
 
-    settings.shippingFee = shippingFee !== undefined ? shippingFee : settings.shippingFee;
-    settings.freeShippingThreshold = freeShippingThreshold !== undefined ? freeShippingThreshold : settings.freeShippingThreshold;
-
-    await settings.save();
+    const settings = await Settings.findOneAndUpdate(
+      { key: 'store_settings' },
+      { $set: updateFields },
+      { new: true, upsert: true, runValidators: true }
+    );
     
+    // Broadcast live settings change to all frontends & admin panels
+    req.io?.emit('settingsUpdated', settings);
+    req.io?.emit('store_settings_update', settings);
+    req.io?.emit('flashSaleUpdated', settings.flashSale);
+
+    console.log('[SETTINGS] Updated & Broadcasted:', settings.flashSale);
+
     res.json(settings);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server Error' });
+    console.error('[SETTINGS] Error updating:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
   }
 });
 

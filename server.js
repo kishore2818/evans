@@ -107,12 +107,7 @@ app.get('/', (req, res) => {
 });
 
 // API Routes
-app.use('/api/products', (req, res, next) => {
-  if (req.method === 'GET' && !req.path.includes('/admin')) {
-    res.set('Cache-Control', 'public, max-age=300');
-  }
-  next();
-}, productRoutes);
+app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);

@@ -51,20 +51,15 @@ router.post('/', protect, async (req, res) => {
       const dbPrice = product.price * (1 - (product.discountPercentage || 0) / 100);
       item.price = dbPrice; // Update item price to DB price
       calculatedTotal += dbPrice * item.quantity;
-
       deducted.push({ product: item.product, quantity: item.quantity });
     }
 
-    // All stock validated and deducted — create the order
     const order = new Order({
       user: req.user._id,
       items,
-      totalAmount: calculatedTotal, // Use calculated total instead of frontend total
+      totalAmount: totalAmount || calculatedTotal,
       shippingAddress,
-      paymentStatus: paymentStatus || 'pending',
-      razorpayOrderId: req.body.razorpayOrderId,
-      razorpayPaymentId: req.body.razorpayPaymentId,
-      razorpaySignature: req.body.razorpaySignature
+      paymentStatus: paymentStatus || 'Pending'
     });
 
     const createdOrder = await order.save();
