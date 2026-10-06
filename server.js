@@ -117,6 +117,6 @@ app.use('/api/settings', settingsRoutes);
 
 const PORT = process.env.PORT || 5001;
 
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode with Socket.io on port ${PORT}`);
 });
