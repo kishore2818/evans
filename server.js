@@ -13,7 +13,12 @@ import wishlistRoutes from './routes/wishlistRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 
+import fs from 'fs';
+
 // Load environment variables
+if (fs.existsSync('./backend/.env')) {
+  dotenv.config({ path: './backend/.env' });
+}
 dotenv.config();
 
 // Connect to MongoDB
