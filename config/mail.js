@@ -82,7 +82,7 @@ const sendOrderEmail = async (order, user, type = 'customer') => {
           <div style="background: #FAFAFA; padding: 40px; text-align: center; color: #999;">
             <p style="font-size: 14px; color: ${primaryColor}; font-weight: 700; margin-bottom: 10px;">Evans Luxe Beauty</p>
             <p style="font-size: 12px; line-height: 1.6; margin: 0;">Radiant Skin, Naturally. <br> If you have any questions, reply to this email or contact <br> <strong>support@evansluxe.com</strong></p>
-            <div style="margin-top: 25px; font-size: 10px; text-transform: uppercase; letter-spacing: 2px;">&copy; 2026 Evans Luxe. All rights reserved.</div>
+            <div style="margin-top: 25px; font-size: 10px; text-transform: uppercase; letter-spacing: 2px;">&copy; 2026 Evans Luxe Beauty (evansluxebeauty). All rights reserved.</div>
           </div>
         </div>
       </div>
@@ -129,7 +129,7 @@ const sendOrderEmail = async (order, user, type = 'customer') => {
       from: `"Evans Luxe Beauty" <${emailUser}>`,
       to: type === 'customer' ? user.email : (process.env.ADMIN_EMAIL || emailUser),
       subject: type === 'customer' 
-        ? `✨ Order Confirmed: Your Evans Luxe Essentials are on the way! (#${order._id.toString().slice(-6).toUpperCase()})` 
+        ? `✨ Order Confirmed: Your Evans Luxe Beauty Essentials are on the way! (#${order._id.toString().slice(-6).toUpperCase()})` 
         : `🚨 NEW ORDER: ₹${order.totalAmount.toLocaleString('en-IN')} from ${user.username}`,
       html: type === 'customer' ? customerEmailContent : adminEmailContent,
     };

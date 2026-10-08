@@ -331,7 +331,7 @@ router.post('/forgot-password', async (req, res) => {
     const formattedMobile = storedMobile.startsWith('+') ? storedMobile : `+91${storedMobile}`;
 
     await client.messages.create({
-      body: `Your Evans Luxe recovery OTP is: ${otp}. Valid for 10 minutes.`,
+      body: `Your Evans Luxe Beauty recovery OTP is: ${otp}. Valid for 10 minutes.`,
       from: process.env.TWILIO_PHONE_NUMBER,
       to: formattedMobile,
     });

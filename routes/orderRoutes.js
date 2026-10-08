@@ -102,7 +102,7 @@ router.get('/myorders', protect, async (req, res) => {
 // @route   GET /api/orders/admin
 // @access  Private (Admin)
 router.get('/admin', protectAdmin, async (req, res) => {
-  const pageSize = 10;
+  const pageSize = Number(req.query.pageSize) || Number(req.query.limit) || 10;
   const page = Number(req.query.pageNumber) || 1;
 
   try {

@@ -35,12 +35,17 @@ router.put('/', protectAdmin, async (req, res) => {
     if (flashSale !== undefined) {
       updateFields.flashSale = {
         isActive: Boolean(flashSale.isActive),
-        title: flashSale.title || 'Luxe Summer Glow Sale',
+        title: flashSale.title || 'Evans Luxe Pop Tiger Sale',
+        badgeText: flashSale.badgeText || 'POP TIGER OFFER',
         bannerText: flashSale.bannerText || '',
         discountPercentage: Number(flashSale.discountPercentage) || 0,
         endDate: flashSale.endDate ? new Date(flashSale.endDate) : new Date(Date.now() + 48 * 3600 * 1000),
-        buttonText: flashSale.buttonText || 'Shop Flash Deals',
-        linkUrl: flashSale.linkUrl || '/products'
+        buttonText: flashSale.buttonText || 'Shop Pop Tiger Deals',
+        linkUrl: flashSale.linkUrl || '/products?sale=true',
+        couponCode: flashSale.couponCode || 'TIGER25',
+        minOrderValue: Number(flashSale.minOrderValue) || 999,
+        giftPerk: flashSale.giftPerk || 'Free Rose Bar on ₹999+',
+        showPopup: flashSale.showPopup !== undefined ? Boolean(flashSale.showPopup) : true
       };
     }
 

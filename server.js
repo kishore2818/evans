@@ -84,7 +84,7 @@ app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
     const normalizedOrigin = origin.replace(/\/$/, '');
-    if (normalizedOrigin.startsWith('http://localhost:')) return callback(null, true);
+    if (normalizedOrigin.startsWith('http://localhost:') || normalizedOrigin.startsWith('http://127.0.0.1:')) return callback(null, true);
     if (
       normalizedOrigin.startsWith('http://192.168.') || 
       normalizedOrigin.startsWith('http://10.') || 

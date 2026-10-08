@@ -19,12 +19,17 @@ const settingsSchema = new mongoose.Schema({
   },
   flashSale: {
     isActive: { type: Boolean, default: true },
-    title: { type: String, default: 'Luxe Summer Glow Sale' },
-    bannerText: { type: String, default: '✦ LIMITED TIME FLASH SALE: Up to 40% OFF Signature Botanicals + Free Luxe Pouch on ₹1999+' },
+    title: { type: String, default: 'Evans Luxe Pop Tiger Sale' },
+    badgeText: { type: String, default: 'POP TIGER OFFER' },
+    bannerText: { type: String, default: '✦ FESTIVE GLOW DAYS: Flat 25% OFF on all organic elixirs + Free Rose Bar on ₹999+' },
     discountPercentage: { type: Number, default: 25 },
     endDate: { type: Date, default: () => new Date(Date.now() + 48 * 3600 * 1000) },
-    buttonText: { type: String, default: 'Shop Flash Deals' },
-    linkUrl: { type: String, default: '/products' }
+    buttonText: { type: String, default: 'Shop Pop Tiger Deals' },
+    linkUrl: { type: String, default: '/products?sale=true' },
+    couponCode: { type: String, default: 'TIGER25' },
+    minOrderValue: { type: Number, default: 999 },
+    giftPerk: { type: String, default: 'Free Rose Bar on ₹999+' },
+    showPopup: { type: Boolean, default: true }
   }
 }, {
   timestamps: true
