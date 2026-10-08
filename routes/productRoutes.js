@@ -155,8 +155,25 @@ router.put('/:id', protectAdmin, upload.array('images', 5), async (req, res) => 
       if (beforeAfter !== undefined) product.beforeAfter = parseJSON(beforeAfter, product.beforeAfter);
       if (flashSale !== undefined) product.flashSale = parseJSON(flashSale, product.flashSale);
 
-      if (req.files && req.files.length > 0) {
-        product.images = req.files.map(file => file.path);
+      const newUploadedUrls = (req.files && req.files.length > 0) ? req.files.map(file => file.path) : [];
+
+      if (req.body.existingImages !== undefined) {
+        let keptImages = [];
+        if (typeof req.body.existingImages === 'string') {
+          try {
+            const parsed = JSON.parse(req.body.existingImages);
+            keptImages = Array.isArray(parsed) ? parsed : (req.body.existingImages ? [req.body.existingImages] : []);
+          } catch {
+            keptImages = req.body.existingImages ? [req.body.existingImages] : [];
+          }
+        } else if (Array.isArray(req.body.existingImages)) {
+          keptImages = req.body.existingImages;
+        }
+
+        // Combine retained existing image URLs with newly uploaded image files
+        product.images = [...keptImages, ...newUploadedUrls];
+      } else if (newUploadedUrls.length > 0) {
+        product.images = newUploadedUrls;
       }
 
       const updatedProduct = await product.save();
@@ -164,6 +181,7 @@ router.put('/:id', protectAdmin, upload.array('images', 5), async (req, res) => 
       // Emit real-time product update to all connected clients
       req.io?.emit('productUpdated', updatedProduct);
       req.io?.emit('product_update', updatedProduct);
+      req.io?.emit('products_updated', updatedProduct);
 
       res.json(updatedProduct);
     } else {
