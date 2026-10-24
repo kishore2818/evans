@@ -16,6 +16,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: "evan's products", // User specifically requested this name
     allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
+    transformation: [{ quality: 'auto', fetch_format: 'auto' }],
   },
 });
 

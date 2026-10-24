@@ -1,5 +1,25 @@
 import mongoose from 'mongoose';
 
+const offerItemSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  category: { type: String, default: 'Festival' }, // 'Pongal', 'Diwali', 'New Year', 'Flash Sale', 'Seasonal', 'Custom'
+  badgeText: { type: String, default: 'FESTIVAL SPECIAL' },
+  bannerText: { type: String, default: '' },
+  discountPercentage: { type: Number, required: true, default: 20 },
+  couponCode: { type: String, default: '' },
+  startDate: { type: Date, default: Date.now },
+  endDate: { type: Date, required: true },
+  status: { type: String, enum: ['active', 'upcoming', 'expired', 'paused'], default: 'active' },
+  assignedScope: { type: String, default: 'All Products' },
+  minOrderValue: { type: Number, default: 0 },
+  giftPerk: { type: String, default: '' },
+  ordersCount: { type: Number, default: 0 },
+  revenueGenerated: { type: Number, default: 0 },
+  discountGiven: { type: Number, default: 0 },
+  unitsSold: { type: Number, default: 0 },
+  isLive: { type: Boolean, default: false }
+}, { timestamps: true });
+
 const settingsSchema = new mongoose.Schema({
   key: {
     type: String,
@@ -30,7 +50,8 @@ const settingsSchema = new mongoose.Schema({
     minOrderValue: { type: Number, default: 999 },
     giftPerk: { type: String, default: 'Free Rose Bar on ₹999+' },
     showPopup: { type: Boolean, default: true }
-  }
+  },
+  offersHistory: [offerItemSchema]
 }, {
   timestamps: true
 });

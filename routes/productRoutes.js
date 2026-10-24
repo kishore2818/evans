@@ -12,6 +12,7 @@ const router = express.Router();
 // @access  Public
 router.get('/', async (req, res) => {
   try {
+    res.set('Cache-Control', 'public, max-age=30, stale-while-revalidate=60');
     const products = await Product
       .find({ isActive: true })
       .select('-reviews')
@@ -44,7 +45,8 @@ router.get('/admin', protectAdmin, async (req, res) => {
 // @access  Public
 router.get('/:id', async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    res.set('Cache-Control', 'public, max-age=30, stale-while-revalidate=60');
+    const product = await Product.findById(req.params.id).lean();
     if (product) {
       // Don't show inactive products to regular users unless they are admin
       if (!product.isActive && !req.query.admin) {
