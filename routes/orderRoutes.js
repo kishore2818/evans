@@ -59,7 +59,7 @@ router.post('/', protect, async (req, res) => {
       items,
       totalAmount: totalAmount || calculatedTotal,
       shippingAddress,
-      paymentStatus: paymentStatus || 'Pending'
+      paymentStatus: (paymentStatus || 'pending').toLowerCase()
     });
 
     const createdOrder = await order.save();
